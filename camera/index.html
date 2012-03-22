@@ -1,0 +1,423 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+
+<title>Camera</title>
+
+<!-- 1329954496 -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" href="/static/style_new.css" type="text/css" />
+
+<link rel="pingback" href="http://www.xarg.org/pingback/" />
+
+<meta name="robots" content="index, follow" />
+<meta name="ICBM" content="50.93793,14.84811" />
+<meta name="blogcatalog" content="9BC9486214" />
+
+<link rel="alternate" type="application/rss+xml" title="Code is Poetry" href="http://feeds.feedburner.com/exarg" />
+<meta property="fb:admins" content="1522308563" />
+<link rel="archives" title="Optimization tips of December 2009" href="/2009/12/" />
+<link rel="archives" title="Optimization tips of October 2009" href="/2009/10/" />
+<link rel="archives" title="Optimization tips of September 2009" href="/2009/09/" />
+<link rel="archives" title="Optimization tips of August 2009" href="/2009/08/" />
+<link rel="archives" title="Optimization tips of September 2008" href="/2008/09/" />
+<link rel="archives" title="Optimization tips of July 2008" href="/2008/07/" />
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="keywords" content="User generated Content, LUA, Ruby, JavaScript, C#, Lucene, JSON, Web 2.0" />
+<meta name="description" content="Building intelligent and scalable web applications" />
+
+<!--[if IE]><script src="/static/excanvas.js"></script><![endif]-->
+
+
+<style type="text/css">
+
+#webcam, #canvas {
+	width: 320px;
+	border:20px solid #333;
+	background:#eee;
+	-webkit-border-radius: 20px;
+	-moz-border-radius: 20px;
+	border-radius: 20px;
+}
+
+#webcam {
+	position:relative;
+	margin-top:50px;
+	margin-bottom:50px;
+}
+
+#webcam > span {
+	z-index:2;
+	position:absolute;
+	color:#eee;
+	font-size:10px;
+	bottom: -16px;
+	left:152px;
+}
+
+#webcam > img {
+	z-index:1;
+	position:absolute;
+	border:0px none;
+	padding:0px;
+	bottom:-40px;
+	left:89px;
+}
+
+#webcam > div {
+	border:5px solid #333;
+	position:absolute;
+	right:-90px;
+	padding:5px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	cursor:pointer;
+}
+
+#webcam a {
+	background:#fff;
+	font-weight:bold;
+}
+
+#webcam a > img {
+	border:0px none;
+}
+
+#canvas {
+	border:20px solid #ccc;
+	background:#eee;
+}
+
+#flash {
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:5000;
+	width:100%;
+	height:500px;
+	background-color:#c00;
+	display:none;
+}
+
+object {
+	display:block; /* HTML5 fix */
+	position:relative;
+	z-index:1000;
+}
+
+</style>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="jquery.webcam.js"></script>
+<!--[if IE]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+<script type="text/javascript">
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-1101037-2']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+</script>
+</head>
+
+<body>
+
+<div id="wrap">
+
+
+
+
+	<div id="main" style="float:left">
+
+	<section>
+
+
+<p id="status" style="height:22px; color:#c00;font-weight:bold;"></p>
+
+<div id="webcam">
+	<img src="/static/antenna.png" alt="" />
+	<span>jQuery</span>
+	<div><a onClick="toggleFilter(this);"><img src="/static/icon_filter.png" alt="" /></a></div>
+</div>
+
+<p style="width:360px;text-align:center; "><a href="javascript:webcam.capture(3);changeFilter();void(0);">Take a picture after 3 seconds</a> | <a href="javascript:webcam.capture();changeFilter();void(0);">Take a picture instantly</a></p>
+
+<p><canvas id="canvas" height="240" width="320"></canvas></p>
+
+<h3>Available Cameras</h3>
+
+<ul id="cams"></ul>
+
+<script type="text/javascript">
+
+var pos = 0;
+var ctx = null;
+var cam = null;
+var image = null;
+
+var filter_on = false;
+var filter_id = 0;
+
+function changeFilter() {
+	if (filter_on) {
+		filter_id = (filter_id + 1) & 7;
+	}
+}
+
+function toggleFilter(obj) {
+	if (filter_on =!filter_on) {
+		obj.parentNode.style.borderColor = "#c00";
+	} else {
+		obj.parentNode.style.borderColor = "#333";
+	}
+}
+
+jQuery("#webcam").webcam({
+
+	width: 320,
+	height: 240,
+	mode: "callback",
+	swffile: "jscam_canvas_only.swf",
+
+	onTick: function(remain) {
+
+		if (0 == remain) {
+			jQuery("#status").text("Cheese!");
+		} else {
+			jQuery("#status").text(remain + " seconds remaining...");
+		}
+	},
+
+	onSave: function(data) {
+
+		var col = data.split(";");
+		var img = image;
+
+		if (false == filter_on) {
+
+			for(var i = 0; i < 320; i++) {
+				var tmp = parseInt(col[i]);
+				img.data[pos + 0] = (tmp >> 16) & 0xff;
+				img.data[pos + 1] = (tmp >> 8) & 0xff;
+				img.data[pos + 2] = tmp & 0xff;
+				img.data[pos + 3] = 0xff;
+				pos+= 4;
+			}
+
+		} else {
+
+			var id = filter_id;
+			var r,g,b;
+			var r1 = Math.floor(Math.random() * 255);
+			var r2 = Math.floor(Math.random() * 255);
+			var r3 = Math.floor(Math.random() * 255);
+
+			for(var i = 0; i < 320; i++) {
+				var tmp = parseInt(col[i]);
+
+				/* Copied some xcolor methods here to be faster than calling all methods inside of xcolor and to not serve complete library with every req */
+
+				if (id == 0) {
+					r = (tmp >> 16) & 0xff;
+					g = 0xff;
+					b = 0xff;
+				} else if (id == 1) {
+					r = 0xff;
+					g = (tmp >> 8) & 0xff;
+					b = 0xff;
+				} else if (id == 2) {
+					r = 0xff;
+					g = 0xff;
+					b = tmp & 0xff;
+				} else if (id == 3) {
+					r = 0xff ^ ((tmp >> 16) & 0xff);
+					g = 0xff ^ ((tmp >> 8) & 0xff);
+					b = 0xff ^ (tmp & 0xff);
+				} else if (id == 4) {
+
+					r = (tmp >> 16) & 0xff;
+					g = (tmp >> 8) & 0xff;
+					b = tmp & 0xff;
+					var v = Math.min(Math.floor(.35 + 13 * (r + g + b) / 60), 255);
+					r = v;
+					g = v;
+					b = v;
+				} else if (id == 5) {
+					r = (tmp >> 16) & 0xff;
+					g = (tmp >> 8) & 0xff;
+					b = tmp & 0xff;
+					if ((r+= 32) < 0) r = 0;
+					if ((g+= 32) < 0) g = 0;
+					if ((b+= 32) < 0) b = 0;
+				} else if (id == 6) {
+					r = (tmp >> 16) & 0xff;
+					g = (tmp >> 8) & 0xff;
+					b = tmp & 0xff;
+					if ((r-= 32) < 0) r = 0;
+					if ((g-= 32) < 0) g = 0;
+					if ((b-= 32) < 0) b = 0;
+				} else if (id == 7) {
+					r = (tmp >> 16) & 0xff;
+					g = (tmp >> 8) & 0xff;
+					b = tmp & 0xff;
+					r = Math.floor(r / 255 * r1);
+					g = Math.floor(g / 255 * r2);
+					b = Math.floor(b / 255 * r3);
+				}
+
+				img.data[pos + 0] = r;
+				img.data[pos + 1] = g;
+				img.data[pos + 2] = b;
+				img.data[pos + 3] = 0xff;
+				pos+= 4;
+			}
+		}
+
+		if (pos >= 0x4B000) {
+			ctx.putImageData(img, 0, 0);
+			pos = 0;
+		}
+	},
+
+	onCapture: function () {
+		webcam.save();
+
+		jQuery("#flash").css("display", "block");
+		jQuery("#flash").fadeOut(100, function () {
+			jQuery("#flash").css("opacity", 1);
+		});
+	},
+
+	debug: function (type, string) {
+		jQuery("#status").html(type + ": " + string);
+	},
+
+	onLoad: function () {
+
+		var cams = webcam.getCameraList();
+		for(var i in cams) {
+			jQuery("#cams").append("<li>" + cams[i] + "</li>");
+		}
+	}
+});
+
+function getPageSize() {
+
+	var xScroll, yScroll;
+
+	if (window.innerHeight && window.scrollMaxY) {
+		xScroll = window.innerWidth + window.scrollMaxX;
+		yScroll = window.innerHeight + window.scrollMaxY;
+	} else if (document.body.scrollHeight > document.body.offsetHeight){ // all but Explorer Mac
+		xScroll = document.body.scrollWidth;
+		yScroll = document.body.scrollHeight;
+	} else { // Explorer Mac...would also work in Explorer 6 Strict, Mozilla and Safari
+		xScroll = document.body.offsetWidth;
+		yScroll = document.body.offsetHeight;
+	}
+
+	var windowWidth, windowHeight;
+
+	if (self.innerHeight) { // all except Explorer
+		if(document.documentElement.clientWidth){
+			windowWidth = document.documentElement.clientWidth;
+		} else {
+			windowWidth = self.innerWidth;
+		}
+		windowHeight = self.innerHeight;
+	} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+		windowWidth = document.documentElement.clientWidth;
+		windowHeight = document.documentElement.clientHeight;
+	} else if (document.body) { // other Explorers
+		windowWidth = document.body.clientWidth;
+		windowHeight = document.body.clientHeight;
+	}
+
+	// for small pages with total height less then height of the viewport
+	if(yScroll < windowHeight){
+		pageHeight = windowHeight;
+	} else {
+		pageHeight = yScroll;
+	}
+
+	// for small pages with total width less then width of the viewport
+	if(xScroll < windowWidth){
+		pageWidth = xScroll;
+	} else {
+		pageWidth = windowWidth;
+	}
+
+	return [pageWidth, pageHeight];
+}
+
+window.addEventListener("load", function() {
+
+	jQuery("body").append("<div id=\"flash\"></div>");
+
+	var canvas = document.getElementById("canvas");
+
+	if (canvas.getContext) {
+		ctx = document.getElementById("canvas").getContext("2d");
+		ctx.clearRect(0, 0, 320, 240);
+
+		var img = new Image();
+		img.src = "/static/logo.gif";
+		img.onload = function() {
+			ctx.drawImage(img, 129, 89);
+		}
+		image = ctx.getImageData(0, 0, 320, 240);
+	}
+	
+	var pageSize = getPageSize();
+	jQuery("#flash").css({ height: pageSize[1] + "px" });
+
+}, false);
+
+window.addEventListener("resize", function() {
+
+	var pageSize = getPageSize();
+	jQuery("#flash").css({ height: pageSize[1] + "px" });
+
+}, false);
+
+</script>
+
+<p>If you activate the filter with the button on the right side of the picture, methods of my already published <a href="/project/jquery-color-plugin-xcolor/">jQuery plugin xcolor</a> will be used to distort the colors of the Canvas.</p>
+
+<h2>General information about the interface</h2>
+
+<p>The following snippet describes the interface of the webcam API:</p>
+
+<pre class="prettyprint">$(&quot;#camera&quot;).webcam({
+	width: 320,
+	height: 240,
+	mode: &quot;callback&quot;,
+	swffile: &quot;/download/jscam_canvas_only.swf&quot;,
+	onTick: function() {},
+	onSave: function() {},
+	onCapture: function() {},
+	debug: function() {},
+	onLoad: function() {}
+});</pre>
+
+
+
+</body>
+
+</html>

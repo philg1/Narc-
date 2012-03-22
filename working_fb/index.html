@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US"
+      xmlns:fb="https://www.facebook.com/2008/fbml"> 
+<head>
+  <title>Facebook Experiment</title>
+</head>
+<body>
+  	<div id="fb-root"></div>
+	<script>
+	var name;
+	var uid;
+	var photos;
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '294448483953041', // App ID
+	      channelUrl : '//itp.nyu.edu/~pg1035/fb/channel.html', // Channel File
+	      status     : true, // check login status
+	      cookie     : true, // enable cookies to allow the server to access the session
+	      xfbml      : true  // parse XFBML
+	    });
+
+	    // Additional initialization code here
+	 FB.login(function(response) {
+	   if (response.authResponse) {
+	     console.log('Welcome!  Fetching your information.... ');
+	
+	     FB.api('/me', function(response) {
+	       console.log('Good to see you, ' + response.name + '.');
+			name=response.name;
+			uid=response.username;
+
+			var element = document.getElementById('mainbody');
+			element.innerHTML = 
+			'Hey, ' + name + '<br />' +
+ 			'<img src="https://graph.facebook.com/' + uid + '/picture?type=large" align="left" style="padding:5px;" />';
+	
+	     }, {scope: 'email,user_likes,user_about_me,user_birthday,user_hometown,user_photos'});
+	   } else {
+	     console.log('User cancelled login or did not fully authorize.');
+	   }
+	 });
+	
+	}; 
+
+	  // Load the SDK Asynchronously
+	  (function(d){
+	     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     ref.parentNode.insertBefore(js, ref);
+	   }(document));
+	
+	
+	</script>
+	<p id="mainbody">Loading FB stuff....</p>
+	
+</body>
+</html> 

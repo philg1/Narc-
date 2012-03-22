@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Bootstrap, from Twitter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+	* {
+		padding: 0;
+		margin: 0;
+		}
+		
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+		background-color: #ADD8E6;
+      }
+	#citylist {
+		text-align: center;
+		margin: -150px auto 0 auto;
+		width: 800px;
+		}
+
+	#citylist ul {
+		list-style: none;
+		position: relative;
+		width: 800px;
+		overflow: hidden;
+		}
+
+	#citylist li {
+		display: block;
+		margin-bottom: 12px;
+		height: 283px;
+		width: 250px;
+		float: left;
+		padding: 10px 0;
+		font-family: "Helvetica Neue", Arial, sans-serif;
+		font-size: 14px;
+		font-weight: bold;
+		line-height: 1.5;
+		padding-bottom: 13px;
+		background: #fff url('http://robotflaneur.s3.amazonaws.com/polaroid_shadow.png') bottom center no-repeat;
+		}
+	#citylist li a {
+		text-decoration: none;
+		color: #444;
+		text-shadow: #fff 1px 1px 0;
+		}
+	#citylist li a span.cityname {
+		text-indent: -9999px;
+		display: block;
+		width: 230px;
+		height: 30px;
+		margin: 5px 8px;
+		background-color: #fff;
+		background-position: top center;
+		background-repeat: no-repeat;
+		}
+	#citylist li a:hover span.cityname {
+		background-position: bottom center;
+		}
+	#citylist li a span.london { background-image: url('http://robotflaneur.s3.amazonaws.com/n_london.png'); }
+	#citylist li a span.sanfrancisco { background-image: url('http://robotflaneur.s3.amazonaws.com/n_sanfrancisco.png'); }
+	#citylist li a span.manhattan { background-image: url('http://robotflaneur.s3.amazonaws.com/n_manhattan.png'); }
+	#citylist li a span.saopaulo { background-image: url('http://robotflaneur.s3.amazonaws.com/n_saopaulo.png'); }
+	#citylist li a span.paris { background-image: url('http://robotflaneur.s3.amazonaws.com/n_paris.png'); }
+	#citylist li a span.berlin { background-image: url('http://robotflaneur.s3.amazonaws.com/n_berlin.png'); }
+	#citylist li a span.mexicocity { background-image: url('http://robotflaneur.s3.amazonaws.com/n_mexicocity.png'); }
+	#citylist li a span.tokyo { background-image: url('http://robotflaneur.s3.amazonaws.com/n_tokyo.png'); }
+	#citylist li a span.johannesburg { background-image: url('http://robotflaneur.s3.amazonaws.com/n_johannesburg.png'); }
+    </style>
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Project name</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- Main hero unit for a primary marketing message or call to action -->
+      <div class="hero-unit">
+        <h1>Hello, world!</h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+      </div>
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="span4">
+          <h2>Heading</h2>
+           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+        <div class="span4">
+          <h2>Heading</h2>
+           <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+       </div>
+        <div class="span4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn" href="#">View details &raquo;</a></p>
+        </div>
+      </div>
+
+      <hr>
+	<div id="citylist">
+	    <ul>
+	    <li style="margin-right: 25px;" ><a href="london"><img src="http://robotflaneur.s3.amazonaws.com/p_london.png" width="230" height="230" /><span class="cityname london">London</span></a></li>
+	    <li style="margin-right: 25px;" ><a href="sanfrancisco"><img src="http://robotflaneur.s3.amazonaws.com/p_sanfrancisco.png" width="230" height="230" /><span class="cityname sanfrancisco">San Francisco</a></li>
+	    <li><a href="manhattan"><img src="http://robotflaneur.s3.amazonaws.com/p_manhattan.png" width="230" height="230" /><span class="cityname manhattan">Manhattan</a></li>
+	    <li style="margin-right: 25px;" ><a href="saopaulo"><img src="http://robotflaneur.s3.amazonaws.com/p_saopaulo.png" width="230" height="230" /><span class="cityname saopaulo">S&atilde;o Paulo</a></li>
+	    <li style="margin-right: 25px;" ><a href="paris"><img src="http://robotflaneur.s3.amazonaws.com/p_paris.png" width="230" height="230" /><span class="cityname paris">Paris</a></li>
+	    <li><a href="berlin"><img src="http://robotflaneur.s3.amazonaws.com/p_berlin.png" width="230" height="230" /><span class="cityname berlin">Berlin</a></li>
+	    <li style="margin-right: 25px;" ><a href="johannesburg"><img src="http://robotflaneur.s3.amazonaws.com/p_johannesburg.png" width="230" height="230" /><span class="cityname johannesburg">Johannesburg</a></li>
+	    <li style="margin-right: 25px;" ><a href="tokyo"><img src="http://robotflaneur.s3.amazonaws.com/p_tokyo.png" width="230" height="230" /><span class="cityname tokyo">Tokyo</a></li>
+	    <li><a href="mexicocity"><img src="http://robotflaneur.s3.amazonaws.com/p_mexicocity.png" width="230" height="230" /><span class="cityname mexicocity">Mexico City</a></li>
+		</ul>
+		</div>
+
+      <footer>
+        <p>&copy; Company 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/bootstrap-transition.js"></script>
+    <script src="../assets/js/bootstrap-alert.js"></script>
+    <script src="../assets/js/bootstrap-modal.js"></script>
+    <script src="../assets/js/bootstrap-dropdown.js"></script>
+    <script src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script src="../assets/js/bootstrap-tab.js"></script>
+    <script src="../assets/js/bootstrap-tooltip.js"></script>
+    <script src="../assets/js/bootstrap-popover.js"></script>
+    <script src="../assets/js/bootstrap-button.js"></script>
+    <script src="../assets/js/bootstrap-collapse.js"></script>
+    <script src="../assets/js/bootstrap-carousel.js"></script>
+    <script src="../assets/js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
